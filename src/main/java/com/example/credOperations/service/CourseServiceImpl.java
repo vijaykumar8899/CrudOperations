@@ -1,14 +1,21 @@
 
 package com.example.credOperations.service;
-
+ 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.credOperations.binding.Course;
+import com.example.credOperations.binding.Laptop;
 import com.example.credOperations.repo.CourseRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 //to represent this service class as a spring Bean we use annotaion service.
 
@@ -21,9 +28,26 @@ public class CourseServiceImpl implements CourseService {
 
 	@Autowired
 	private CourseRepository courseRepo;
+	
+	@PersistenceContext
+	private EntityManager entityManger;
 
 	@Override
-	public String upsert(Course course) {
+	@Transactional
+	public String upsert(@RequestBody Course course) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestBody = objectMapper.writeValueAsString(course);
+			System.out.println("Request body : "+requestBody);
+		}
+		catch(Exception e) {
+			System.out.println("error print req body : "+e.getMessage());
+		}
+ 		Laptop laptop = new Laptop();
+ 		 String laptopName = course.getLaptop().getLaptopName(); 
+		laptop.setLaptopName(laptopName);
+		entityManger.persist(laptop);
+		course.setLaptop(laptop);
 		courseRepo.save(course);
 		return "Success";
 	}
@@ -31,7 +55,6 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public Course getById(Integer cid) {
 		Optional<Course> findById = courseRepo.findById(cid);
-
 		if (findById.isPresent()) {
 			return findById.get();
 		}
@@ -42,6 +65,23 @@ public class CourseServiceImpl implements CourseService {
 	public List<Course> getAllCourses() {
 
 		return courseRepo.findAll();
+	}
+
+	@Override
+	public List<Course> getAllCoursesOfThisMonth() {
+//		Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.DAY_OF_MONTH, 1);
+//        Date startOfMonth = calendar.getTime();
+//
+//        // Get the end date of the current month
+//        calendar.add(Calendar.MONTH, 1);
+//        calendar.add(Calendar.DATE, -1);
+//        Date endOfMonth = calendar.getTime();
+//
+//
+//		return courseRepo.findByCourseDateBetween(startOfMonth,endOfMonth);
+		
+		return null;
 	}
 
 	@Override

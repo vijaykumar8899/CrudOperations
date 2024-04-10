@@ -15,4 +15,6 @@ public interface CourseService {
 	public List<Course> getAllCourses();
 	
 	public String deleteById(Integer cid);
+
+	public List<Course> getAllCoursesOfThisMonth();
 }

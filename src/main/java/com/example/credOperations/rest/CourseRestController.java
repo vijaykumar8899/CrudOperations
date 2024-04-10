@@ -34,6 +34,12 @@ public class CourseRestController {
 		return new ResponseEntity<>(allCourses, HttpStatus.OK);
 	}
 
+	@GetMapping("/getAllCoursesOfThisMonth")
+	public ResponseEntity<List<Course>> getAllCoursesOfThisMonth() {
+		List<Course> allCourses = courseService.getAllCoursesOfThisMonth();
+		return new ResponseEntity<>(allCourses, HttpStatus.OK);
+	}
+
 	@PutMapping("/course")
 	public ResponseEntity<String> updateCourse(@RequestBody Course course) {
 		String status = courseService.upsert(course);

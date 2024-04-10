@@ -3,8 +3,8 @@ spring:
     name: credOperations-1
     
   datasource:
-    url: jdbc:mysql://localhost:3306/test2
-    username: root
+    url: jdbc:mysql://localhost:3306/crud
+    username: vijaya
     password: MySQL9150.@
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
